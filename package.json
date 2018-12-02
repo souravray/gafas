@@ -1,0 +1,26 @@
+{
+  "name": "gafas",
+  "version": "0.1.0",
+  "description": "A JSON beautifier, that you have always longed for!",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/souravray/gafas.git"
+  },
+  "keywords": [
+    "JSON",
+    "beautifier",
+    "cli",
+    "development",
+    "logs"
+  ],
+  "author": "Sourav Ray <me@raysourav.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/souravray/gafas/issues"
+  },
+  "homepage": "https://github.com/souravray/gafas#readme"
+}
