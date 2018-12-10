@@ -1,2 +1,2 @@
 # gafas
-A JSON beautifier, that you have always longed for!
+A JBeautiful JSON snippet viewer for Terminal! :black_large_square:
