@@ -1,10 +1,16 @@
 {
   "name": "gafas",
   "version": "0.1.0",
-  "description": "A JSON beautifier, that you have always longed for!",
+  "description": "Beautiful JSON snippet viewer for Terminal",
   "main": "index.js",
+  "engines": {
+    "node": ">= 10"
+  },
   "scripts": {
-    "start": "node index.js"
+    "develop": "node index.js"
+  },
+  "bin": {
+    "gafas": "./index.js"
   },
   "repository": {
     "type": "git",

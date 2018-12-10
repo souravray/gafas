@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const scanner = require('./src/scanner')
  , viewer = require('./src/viewer')
  , history  = scanner.history
