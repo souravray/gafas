@@ -4,7 +4,7 @@
   "description": "A JSON beautifier, that you have always longed for!",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,16 @@
   "bugs": {
     "url": "https://github.com/souravray/gafas/issues"
   },
-  "homepage": "https://github.com/souravray/gafas#readme"
+  "homepage": "https://github.com/souravray/gafas#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "cli-box": "^6.0.8",
+    "cli-update": "^3.2.5",
+    "clipboardy": "^1.2.3",
+    "figlet": "^1.2.1",
+    "is-win": "^1.0.8",
+    "keypress": "^0.2.1",
+    "lodash": "^4.17.11",
+    "relaxed-json": "^1.0.1"
+  }
 }
