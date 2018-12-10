@@ -21,6 +21,7 @@ class Scrollable extends Events {
     this.windowHeight = _window.maxBounds().height;
     this.updatecount = 0;
     this.updateContent(_content, _startIndex, _layout);
+    this.registerEvents();
   }
 
   updateContent(_content, _startIndex, _layout, _cb) {
