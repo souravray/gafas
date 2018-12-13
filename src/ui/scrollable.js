@@ -18,10 +18,17 @@ class Scrollable extends Events {
       throw Error('A Scrollable contsiner cannot be initialized without keyboarrd event emmiter');
     }
     this.scrollEvents = _events;
+    this.windowEvents = _window.events;
     this.windowHeight = _window.maxBounds().height;
     this.updatecount = 0;
     this.updateContent(_content, _startIndex, _layout);
     this.registerEvents();
+  }
+
+  _resize() {
+    this.windowHeight = _window.maxBounds().height;
+    this. _calculateScroll();
+    this._scroll();
   }
 
   updateContent(_content, _startIndex, _layout, _cb) {
@@ -38,6 +45,9 @@ class Scrollable extends Events {
 
   _calculateScroll() {
     if(this.contentLength <= this.windowHeight){
+      this.startIndex = 0;
+      this.canScrollDown = false;
+      this.canScrollUp = false;
       return;
     }
     
@@ -92,6 +102,7 @@ class Scrollable extends Events {
       this.scrollEvents.on('scroll_down', () => { self._scrollDown() });
       this.scrollEvents.on('scroll_up_fast', () => { self._scrollUpFast() });
       this.scrollEvents.on('scroll_down_fast', () => { self._scrollDownFast() });
+      this.windowEvents.on('window_resize', () => { self._resize() });
       this.setListnets = true;
     }
   }
@@ -103,6 +114,7 @@ class Scrollable extends Events {
       this.scrollEvents.removeAllListeners('scroll_down');
       this.scrollEvents.removeAllListeners('scroll_up_fast');
       this.scrollEvents.removeAllListeners('scroll_down_fast');
+      this.windowEvents.removeAllListeners('window_resize');
       this.removeAllListeners('scrolled');
       this.setListnets = false;
     }

@@ -1,4 +1,17 @@
-const isWin = require("is-win");
+const isWin = require("is-win")
+  , Events = require('events');
+
+class WindowEvents extends Events {
+  constructor() {
+    super();
+    const self = this;
+    process.stdout.on('resize', () => {
+      self.emit('window_resize');
+    })
+  }
+}
+
+module.exports.events = new WindowEvents();
 
 module.exports.maxBounds = () => {
   let height = process.stdout.rows - 3
