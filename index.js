@@ -7,6 +7,10 @@ const scanner = require('./src/scanner')
  , kbEvents = viewer.keyboardEvents;
 
 let scanStarted = false;
+const gracefulExit = () => {
+  viewer.shutdown();
+  process.exit(0);
+};
 
 scanner.on('updated', () => {
   return viewer.updateContent(history.current());
@@ -36,15 +40,15 @@ kbEvents.on('toggle_scan', () => {
 })
 
 kbEvents.on('exit', () => {
-  viewer.loadPage(pages.exit);
+  viewer.loadPage(pages.exit, gracefulExit);
 })
 
 process.on('SIGINT', function() {
-  viewer.loadPage(pages.exit);
+  viewer.loadPage(pages.exit, gracefulExit);
 })
 
 process.on('SIGTERM', function() {
-  viewer.loadPage(pages.exit);
+  viewer.loadPage(pages.exit, gracefulExit);
 })
 
 viewer.loadPage(pages.welcome);

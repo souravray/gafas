@@ -120,6 +120,11 @@ class Scrollable extends Events {
     }
   }
 
+  shuthown() {
+    this.deregisterEvents();
+    this.scrollEvents.close();
+  }
+
   viewContent() {
     let endIndex = this.windowHeight + this.startIndex;
     let _content = this.content.slice(this.startIndex, endIndex);

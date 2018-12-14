@@ -2,7 +2,7 @@ const chalk = require('chalk')
   , figlet = require("figlet")
   , { _window} = require('../ui');
 
-module.exports = () => {
+module.exports = ( cb) => {
   return new Promise((resolve, reject) => {
     figlet('¡Adiós Amigo!', (err, _data) => {
       if(!!err){
@@ -18,7 +18,7 @@ module.exports = () => {
           , h: 10
           , marks: {}
         },
-        callback: () => process.exit(0)
+        callback: () => cb()
       })
     })
   })

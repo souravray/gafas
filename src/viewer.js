@@ -27,11 +27,16 @@ module.exports = (() => {
     }
   }
 
+  const shutdown = () => {
+    return _container.shuthown();
+  }
+
   _container.onScroll(render);
 
   return {
     loadPage,
     updateContent: (...args) => _container.updateContent(...args),
+    shutdown,
     pages: require('./pages'),
     keyboardEvents: kbEvents
   }

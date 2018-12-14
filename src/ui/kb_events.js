@@ -55,8 +55,14 @@ class KBEvents extends Events {
         self.emit('toggle_scan');
       }
     });
+
     process.stdin.setRawMode(true);
     process.stdin.resume();
+    keypress.enableMouse(process.stdout);
+  }
+
+  close() {
+    keypress.disableMouse(process.stdout);
   }
 }
 
