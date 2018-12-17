@@ -4,10 +4,10 @@ const CliUpdate = require("cli-update")
   , figlet = require("figlet")
   , _ = require("lodash");
 
-const { kbEvents, Scrollable} = require('./ui');
+const { kbEvents, Container } = require('./ui');
 
 module.exports = (() => {
-  const _container = Scrollable(kbEvents);
+  const _container = Container({ events: kbEvents });
 
   const render = () => {
     CliUpdate.render(
@@ -31,7 +31,7 @@ module.exports = (() => {
     return _container.shuthown();
   }
 
-  _container.onScroll(render);
+  _container.onUpdate(render);
 
   return {
     loadPage,

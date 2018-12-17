@@ -1,4 +1,5 @@
 module.exports = {
   History: require('./history'), 
-  Hash: require('./hash')
+  Hash: require('./hash'),
+  Mixin: require('./mixin')
 }

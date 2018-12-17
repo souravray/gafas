@@ -1,48 +1,76 @@
-const _window = require('./window')
-  , Events = require('events')
-  , _ = require('lodash');
+const Events = require('events');
 
-const defaultLayout = {
-  fullscreen: true
-  , stretch: true
-  , marks: {}
-  , hAlign: 'left'
-  , vAlign: 'top'
-}
-
-class Scrollable extends Events {
-
-  constructor(_events, _content, _startIndex, _layout, _cb) {
-    super();
-    if(!_events) {
-      throw Error('A Scrollable contsiner cannot be initialized without keyboarrd event emmiter');
+module.exports = Base => class Scrollable extends Base {
+  constructor(options) {
+    super(options);
+    if(!(this instanceof Events)){
+      throw Error('Scrollable object should be an istance of event');
     }
-    this.scrollEvents = _events;
-    this.windowEvents = _window.events;
-    this.windowHeight = _window.maxBounds().height;
-    this.updatecount = 0;
-    this.updateContent(_content, _startIndex, _layout);
-    this.registerEvents();
+
+    this.scrollEvents = options.events;
+    this.windowHeight = options.window.maxBounds().height;
+
   }
 
-  _resize() {
-    this.windowHeight = _window.maxBounds().height;
+  resize(height, width) {
+    if(typeof super.resize === 'function') {
+      super.resize(height, width);
+    }
+    this.windowHeight = height;
     this. _calculateScroll();
     this._scroll();
   }
 
   updateContent(_content, _startIndex, _layout, _cb) {
-    this.updatecount++;
-    this.layout = _layout || defaultLayout;
-    this.content = _content || [];
+    if(typeof super.updateContent === 'function') {
+      super.updateContent(_content, _startIndex, _layout, _cb);
+    }
     this.contentLength =!!_content? _content.length:0;
     this.startIndex = _startIndex || 0;
     this.canScrollDown = false;
     this.canScrollUp = false;
-    this.pageCB = _cb || (()=>{});
     this._scroll();
   }
 
+  viewContent() {
+    if(typeof super.viewContent === 'function') {
+      super.viewContent();
+    }
+    let _content = this.content || [];
+    let endIndex = this.windowHeight + this.startIndex;
+    _content = _content.slice(this.startIndex, endIndex);
+    return _content.join('\n')
+  }
+
+  registerEvents() {
+    if(typeof super.registerEvents === 'function') {
+      super.registerEvents();
+    }
+    const self=this;
+    if(!this.setScrollListnets) {
+      this.scrollEvents.on('scroll_up', () => { self._scrollUp() });
+      this.scrollEvents.on('scroll_down', () => { self._scrollDown() });
+      this.scrollEvents.on('scroll_up_fast', () => { self._scrollUpFast() });
+      this.scrollEvents.on('scroll_down_fast', () => { self._scrollDownFast() });
+      this.setScrollListnets = true;
+    }
+  }
+
+  deregisterEvents() {
+    if(typeof super.deregisterEvents === 'function') {
+      super.deregisterEvents();
+    }
+    const self=this;
+    if(!!this.setScrollListnets) {
+      this.scrollEvents.removeAllListeners('scroll_up');
+      this.scrollEvents.removeAllListeners('scroll_down');
+      this.scrollEvents.removeAllListeners('scroll_up_fast');
+      this.scrollEvents.removeAllListeners('scroll_down_fast');
+      this.setScrollListnets = false;
+    }
+  }
+
+  /* Scroll functions */
   _calculateScroll() {
     if(this.contentLength <= this.windowHeight){
       this.startIndex = 0;
@@ -90,46 +118,4 @@ class Scrollable extends Events {
       this._scroll();
     }
   }
-
-  onScroll(_fnc){
-    this.on('render', _.debounce(_fnc,50));
-  }
-
-  registerEvents() {
-    const self=this;
-    if(!this.setListnets) {
-      this.scrollEvents.on('scroll_up', () => { self._scrollUp() });
-      this.scrollEvents.on('scroll_down', () => { self._scrollDown() });
-      this.scrollEvents.on('scroll_up_fast', () => { self._scrollUpFast() });
-      this.scrollEvents.on('scroll_down_fast', () => { self._scrollDownFast() });
-      this.windowEvents.on('window_resize', () => { self._resize() });
-      this.setListnets = true;
-    }
-  }
-
-  deregisterEvents() {
-    const self=this;
-    if(!!this.setListnets) {
-      this.scrollEvents.removeAllListeners('scroll_up');
-      this.scrollEvents.removeAllListeners('scroll_down');
-      this.scrollEvents.removeAllListeners('scroll_up_fast');
-      this.scrollEvents.removeAllListeners('scroll_down_fast');
-      this.windowEvents.removeAllListeners('window_resize');
-      this.removeAllListeners('scrolled');
-      this.setListnets = false;
-    }
-  }
-
-  shuthown() {
-    this.deregisterEvents();
-    this.scrollEvents.close();
-  }
-
-  viewContent() {
-    let endIndex = this.windowHeight + this.startIndex;
-    let _content = this.content.slice(this.startIndex, endIndex);
-    return _content.join('\n')
-  }
 }
-
-module.exports = (kbEvents, content, index, layout) => new Scrollable(kbEvents, content, index, layout);
