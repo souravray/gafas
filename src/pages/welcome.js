@@ -22,7 +22,10 @@ module.exports = () => {
         .map( c => chalk.greenBright(c))
         .join("\n");
       data = _logo + data + chalk.green('\n\n\nBeautiful JSON snippet viewer.\n\n¡Diviértete!');
-      resolve({content: data.split('\n'), layout: layout});
+      resolve({ content: data.split('\n'),
+        layout: layout,
+        shouldWrapped: false,
+        shouldMmargined: false });
     });
   });
 }

@@ -18,7 +18,9 @@ module.exports = ( cb) => {
           , h: 10
           , marks: {}
         },
-        callback: () => cb()
+        callback: () => cb(),
+        shouldWrapped: false,
+        shouldMmargined: false
       })
     })
   })
