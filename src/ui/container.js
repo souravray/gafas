@@ -1,8 +1,10 @@
 const Sourcable = require('./scrollable')
+  ,  Wrappable = require('./wrappable')
   , { Mixin } = require('../utils')
   , Events = require('events')
   , _window = require('./window')
-  , debounce = require('lodash/debounce');
+  , debounce = require('lodash/debounce')
+  , chalk = require('chalk');
 
 const defaultLayout = {
   fullscreen: true
@@ -12,16 +14,19 @@ const defaultLayout = {
   , vAlign: 'top'
 };
 
-class Container extends Mixin(Events).with(Sourcable) {
+class Container extends Mixin(Events).with(Sourcable, Wrappable) {
   constructor(options) {
     if(!options.events) {
       throw Error('A Container cannot be initialized without keyboarrd event emmiter');
     }
 
-    Object.assign(options, { window: _window})
+    Object.assign(options, { 
+      window: _window.maxBounds()
+    });
     super(options);
     this.updatecount = 0;
     this.windowEvents = _window.events;
+    this.pageMargin = false;
     this.registerEvents();
     this.updateContent(options.content, options.startIndex, options.layout);
   }
@@ -41,21 +46,38 @@ class Container extends Mixin(Events).with(Sourcable) {
     }
   }
 
-  updateContent(_content, _startIndex, _layout, _cb) {
+  updateContent(_content, _startIndex, _layout, _wrap, _margin, _cb) {
     this.updatecount++;
     this.layout = _layout || defaultLayout;
     this.content = _content || [];
-    this.pageCB = _cb || (()=>{});
+    this.pageMargin = (_margin === undefined)? true : _margin;
+    this.pageCB = _cb || (() => {});
 
     if(typeof super.updateContent === 'function') {
-      super.updateContent(_content, _startIndex, _layout, _cb);
+      super.updateContent(_content, _startIndex, _layout, _wrap, _margin, _cb);
     }
+  }
+
+  viewContent() {
+    let _content = this.content;
+    
+    if(typeof super.viewContent === 'function') {
+      _content = super.viewContent();
+    }
+
+    if(this.pageMargin) {
+      return _content.map((c) => {
+          return chalk.gray('░░ ') + chalk.bold(c);
+        }).join('\n')
+    }
+
+    return _content.join('\n');
   }
 
   registerEvents() {
     const self=this;
     if(!this.setContainerListnets) {
-      this.windowEvents.on('window_resize', () => { self.resize() });
+      this.windowEvents.on('window_resize', debounce(() => self.resize(), 150));
       this.setContainerListnets = true;
     }
 

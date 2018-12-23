@@ -2,9 +2,9 @@ const chalk = require('chalk');
 
 const stringFormater = (_jsonStr) => {
   return _jsonStr.split('\n')
-          .map( (c) => {
-            return chalk.gray('░░ ') + chalk.bold(c);
-          });
+          // .map( (c) => {
+          //   return chalk.gray('░░ ') + chalk.bold(c);
+          // });
 }
 
 const jsonFormater = (_json={}) => {

@@ -22,7 +22,7 @@ module.exports = (() => {
     if(_.isFunction(_pageMethod)) {
       const page = await _pageMethod(...args);
       if(!!page) {
-        _container.updateContent(page.content, 0, page.layout, page.callback) 
+        _container.updateContent(page.content, 0, page.layout, page.shouldWrapped, page.shouldMmargined, page.callback) 
       }
     }
   }
